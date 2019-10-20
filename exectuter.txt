@@ -1,0 +1,76 @@
+
+ using System;
+       using System.Collections.Generic;
+       using System.Diagnostics.CodeAnalysis;
+       using System.IO;
+       using System.Linq;
+       using System.Reflection;
+       using System.Text;
+       using Importerer.Util;
+       using ImporterType;
+
+namespace Importerer{
+
+	
+public class Comparer{
+static void Main(string[] args)
+        {
+
+            var import = ImportListFromCSVFile<[ImportTypeName]>();
+            var compareto = ImportListFromCSVFile<[ImportTypeName]>([CompareFilePath]);
+            List<[ImportTypeName]> exceptions = new List<[ImportTypeName]>();
+            foreach (var i in compareto)
+            {
+                if (!import.Contains<[ImportTypeName]>(i))
+                {
+                    exceptions.Add(i);
+                }
+            }
+	    
+            if(exceptions.Count > 0)
+            {
+                //build csv
+                StringBuilder sbExceptions = new StringBuilder();
+                var props = exceptions.First().GetType().GetProperties().ToList();
+                string strArg = "";
+                foreach(var prop in props)
+                {
+                    if(props.IndexOf(prop) == props.Count -1)
+                    {
+                        sbExceptions.AppendFormat("{0}\n", prop.Name);
+                        strArg += "{" + props.IndexOf(prop) + "}\n";
+                    }
+                    else
+                    {
+                        sbExceptions.AppendFormat("{0},", prop.Name);
+                        strArg += "{" + props.IndexOf(prop) + "},";
+                    }
+                }
+                foreach(var x in exceptions)
+                {
+                    foreach(var p in props)
+                    {
+                        if (props.IndexOf(p) == props.Count - 1)
+                        {
+                            sbExceptions.AppendFormat("{0}\n", x.GetType().GetProperty(p.Name).GetValue(x));
+                        }
+                        else
+                        {
+                            sbExceptions.AppendFormat("{0},", x.GetType().GetProperty(p.Name).GetValue(x));
+                        }
+                    }
+                }
+
+                using (StreamWriter sw = new StreamWriter([OutputPath] +"exceptions_" + DateTime.Now.ToString("yyyy_MM_dd_hh_mm_ss") + ".csv"))
+                {
+                    sw.Write(sbExceptions.ToString());
+                }
+            }
+            else
+            {
+                Console.WriteLine("There were no exeptions");
+                Console.ReadLine();
+            }
+        }
+}
+}
