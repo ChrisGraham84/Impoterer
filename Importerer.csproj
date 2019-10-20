@@ -82,5 +82,11 @@
   <ItemGroup>
     <Content Include="exectuter.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Importerer.Util\Importerer.Util.csproj">
+      <Project>{68871be8-a980-4867-b6cd-3de383a87f08}</Project>
+      <Name>Importerer.Util</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

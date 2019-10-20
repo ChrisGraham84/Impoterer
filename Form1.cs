@@ -12,6 +12,7 @@ using System.IO;
 using System.Reflection;
 using System.CodeDom.Compiler;
 using System.Diagnostics;
+using Importerer.Util;
 
 namespace Importerer
 {
@@ -50,18 +51,18 @@ namespace Importerer
 
                 if(File.Exists(SourceFilePath) && File.Exists(CompareFilePath))
                 {
-                    _SourceDictionary = ImportCSVFile(SourceFilePath);
-                    _CompareDictionary = ImportCSVFile(CompareFilePath);
+                    _SourceDictionary = Util.Util.ImportCSVFile(SourceFilePath);
+                    _CompareDictionary = Util.Util.ImportCSVFile(CompareFilePath);
 
                     //check to see if the column headers match
-                    if(_SourceDictionary[1].TrueForAll(clmn => _CompareDictionary[1].Contains(clmn)))
+                    if(Util.Util.CompareColumnNameRow(_SourceDictionary[1], _CompareDictionary[1]))
                     {
                         List<string> ColumnNames = _SourceDictionary[1];
                         txtErrorLog.Text = "Column Names: " + Environment.NewLine;
                         ColumnNames.ForEach(clmn => txtErrorLog.Text += "   " + clmn + Environment.NewLine);
                         
                         
-                        var ClassCode = GenerateImportType(ColumnNames, ImportTypeName);
+                        var ClassCode = Util.Util.GenerateImportType(ColumnNames, ImportTypeName);
                         txtErrorLog.Text += Environment.NewLine;
                         txtErrorLog.Text += Environment.NewLine;
                         txtErrorLog.Text += ClassCode;
@@ -115,7 +116,7 @@ namespace Importerer
                             parameters = new CompilerParameters(referenceAssembliesExe, Executer, false);
                             //Make sure we generate an EXE not a DLL
                             parameters.GenerateExecutable = true;
-                            string appCode = GenerateComparerApp(ImportTypeName);
+                            string appCode = Util.Util.GenerateComparerApp(ImportTypeName, txtSourceFile.Text, txtCompareFile.Text, txtOutputPath.Text);
                             txtErrorLog.Text = appCode;
                             results = codeProvider.CompileAssemblyFromSource(parameters, appCode);
 
@@ -155,112 +156,6 @@ namespace Importerer
             {
                 txtErrorLog.Text = "Not all required fields are filled out";
             }
-        }
-
-        public static Dictionary<int, List<string>> ImportCSVFile(string filepath)
-        {
-
-            string line;
-            int count = 1;
-            Dictionary<int, List<string>> dictRecords = new Dictionary<int, List<string>>();
-
-
-            // Read the file and display it line by line.
-            using (StreamReader file = new StreamReader(filepath))
-            {
-                while ((line = file.ReadLine()) != null)
-                {
-                    List<string> sepList = new List<string>();
-                    char[] delimiters = new char[] { ',' };
-                    string[] parts = line.Replace(",", ", ").Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
-                    for (int i = 0; i < parts.Length; i++)
-                    {
-
-                        //Console.WriteLine(parts[i]);
-                        sepList.Add(parts[i].Trim());
-
-                    }
-                    dictRecords.Add(count, sepList);
-                    count++;
-                }
-
-                file.Close();
-            }
-            return (dictRecords);
-        }
-
-       
-        public string GenerateComparerApp(string ImportTypeName)
-        {
-            string executer = string.Empty;
-            using (StreamReader file = new StreamReader("exectuter.txt"))
-            {
-                executer = file.ReadToEnd();
-            }
-            executer = executer.Replace("[ImportTypeName]", ImportTypeName);
-            executer = executer.Replace("[SourceFilePath]", txtSourceFile.Text);
-            executer = executer.Replace("[CompareFilePath]", txtCompareFile.Text);
-            executer = executer.Replace("[OutputPath]", txtOutputPath.Text);
-
-
-            return executer; 
-        }
-
-        public string GenerateImportType(List<string> ColumnNames, string ImportTypeName)
-        {
-            StringBuilder ClassBuilder = new StringBuilder();
-
-            //Add all the using statements
-            ClassBuilder.Append("using System;");
-            ClassBuilder.Append("using System.Collections.Generic;");
-            ClassBuilder.Append("using System.Diagnostics.CodeAnalysis;");
-            ClassBuilder.Append("using System.IO;");
-            ClassBuilder.Append("using System.Linq;");
-            ClassBuilder.Append("using System.Reflection;");
-            ClassBuilder.Append("using System.Text;");
-
-            ClassBuilder.Append("namespace ImporterType {");
-            //Declare the class and make sure it inherits from IEquatable
-            ClassBuilder.AppendFormat("public class {0} : IEquatable<{0}>", ImportTypeName);
-            ClassBuilder.Append(" {");
-
-            //properties
-            foreach (var p in ColumnNames)
-            {
-                ClassBuilder.Append("	public string " + p + " { get; set; }");
-            }
-            ClassBuilder.Append(" ");
-
-            //Equatable Method
-            ClassBuilder.AppendFormat("	public bool Equals({0} other)", ImportTypeName);
-            ClassBuilder.Append("	{");
-            ClassBuilder.Append("		if (ReferenceEquals(other, null))");
-            ClassBuilder.Append("			return false;");
-            ClassBuilder.Append("		if (ReferenceEquals(other, null))");
-            ClassBuilder.Append("			return true;");
-            foreach (var p in ColumnNames)
-            {
-                //first line has the return statemen
-                if (ColumnNames.IndexOf(p) == 0)
-                {
-                    ClassBuilder.AppendFormat("			return {0}.Equals(other.{0})", p);
-                }
-                //last line needds to have a semicolon
-                else if (ColumnNames.IndexOf(p) == ColumnNames.Count - 1)
-                {
-                    ClassBuilder.AppendFormat("				&& {0}.Equals(other.{0});", p);
-                }
-                else
-                {
-                    ClassBuilder.AppendFormat("				&& {0}.Equals(other.{0})", p);
-                }
-
-            }
-            ClassBuilder.Append("	}");
-            ClassBuilder.Append("}");
-            ClassBuilder.Append("}");
-
-            return ClassBuilder.ToString();
         }
     }
 }

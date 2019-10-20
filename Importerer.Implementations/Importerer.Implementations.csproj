@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{05FD01D5-B1B6-4090-99FD-E300CB6353D6}</ProjectGuid>
+    <ProjectGuid>{7BFDE232-CAD7-4047-8049-73F874AF5CF3}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Importerer.Interfaces</RootNamespace>
-    <AssemblyName>Importerer.Interfaces</AssemblyName>
+    <RootNamespace>Importerer.Implementations</RootNamespace>
+    <AssemblyName>Importerer.Implementations</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -41,16 +41,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IAppCodeGenerator.cs" />
-    <Compile Include="IAppCompiler.cs" />
-    <Compile Include="IComparerer.cs" />
-    <Compile Include="ICreator.cs" />
-    <Compile Include="IDatataFromFile.cs" />
-    <Compile Include="IDataToFile.cs" />
-    <Compile Include="IMatch.cs" />
-    <Compile Include="ITypeCompiler.cs" />
-    <Compile Include="ITypeGenerator.cs" />
+    <Compile Include="Compiler\EquatableTypeCompiler.cs" />
+    <Compile Include="Compiler\MatchCheckExportAppCompiler.cs" />
+    <Compile Include="Creator\Creator.cs" />
+    <Compile Include="Export\CSVFileExport.cs" />
+    <Compile Include="GenerateCode\MatchCheckExportAppCodeGenerator.cs" />
+    <Compile Include="GenerateCode\TypeEquatableCodeGenerator.cs" />
+    <Compile Include="Import\CSVFileImport.cs" />
+    <Compile Include="Compare\MatchSets.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Importerer.Interfaces\Importerer.Interfaces.csproj">
+      <Project>{05fd01d5-b1b6-4090-99fd-e300cb6353d6}</Project>
+      <Name>Importerer.Interfaces</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

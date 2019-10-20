@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Importerer.Interfaces
 {
-    public class Class1
+    public interface ICreator<T>
     {
+        List<T> CreateTypeList(Dictionary<int, List<string>> Data);
     }
 }

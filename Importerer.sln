@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Importerer.Interfaces", "Im
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Importerer.Util", "Importerer.Util\Importerer.Util.csproj", "{68871BE8-A980-4867-B6CD-3DE383A87F08}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Importerer.Implementations", "Importerer.Implementations\Importerer.Implementations.csproj", "{7BFDE232-CAD7-4047-8049-73F874AF5CF3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{68871BE8-A980-4867-B6CD-3DE383A87F08}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{68871BE8-A980-4867-B6CD-3DE383A87F08}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{68871BE8-A980-4867-B6CD-3DE383A87F08}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7BFDE232-CAD7-4047-8049-73F874AF5CF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7BFDE232-CAD7-4047-8049-73F874AF5CF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7BFDE232-CAD7-4047-8049-73F874AF5CF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7BFDE232-CAD7-4047-8049-73F874AF5CF3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
