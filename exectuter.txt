@@ -1,13 +1,13 @@
 
  using System;
-       using System.Collections.Generic;
-       using System.Diagnostics.CodeAnalysis;
-       using System.IO;
-       using System.Linq;
-       using System.Reflection;
-       using System.Text;
-       using Importerer.Util;
-       using ImporterType;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using Importerer.Util;
+using ImporterType;
 
 namespace Importerer{
 
@@ -16,22 +16,34 @@ public class Comparer{
 static void Main(string[] args)
         {
 
-            var import = ImportListFromCSVFile<[ImportTypeName]>();
-            var compareto = ImportListFromCSVFile<[ImportTypeName]>([CompareFilePath]);
-            List<[ImportTypeName]> exceptions = new List<[ImportTypeName]>();
-            foreach (var i in compareto)
-            {
-                if (!import.Contains<[ImportTypeName]>(i))
-                {
-                    exceptions.Add(i);
-                }
+           var import = Util.Util.ImportListFromCSVFile<[ImportTypeName]>(@"[SourceFilePath]");
+            var compareto = Util.Util.ImportListFromCSVFile<[ImportTypeName]>(@"[CompareFilePath]");
+		
+		List<[ImportTypeName]> exceptions = new List<[ImportTypeName]>();
+		    foreach (var c in compareto)
+		    {
+			if (!import.Contains<[ImportTypeName]>(c))
+			{
+			    exceptions.Add(c);
+			}
+			    
+		/*	 bool found = false;
+		foreach(var i in import)
+		{
+		    if(i.Equals(c))
+		    {
+			found = true;
+			break;
+		    }
+		}
+		if (!found) { exceptions.Add(c); }*/
             }
 	    
-            if(exceptions.Count > 0)
+	    if(exceptions.Count > 0)
             {
                 //build csv
                 StringBuilder sbExceptions = new StringBuilder();
-                var props = exceptions.First().GetType().GetProperties().ToList();
+                var props = exceptions[0].GetType().GetProperties().ToList();
                 string strArg = "";
                 foreach(var prop in props)
                 {
@@ -61,7 +73,7 @@ static void Main(string[] args)
                     }
                 }
 
-                using (StreamWriter sw = new StreamWriter([OutputPath] +"exceptions_" + DateTime.Now.ToString("yyyy_MM_dd_hh_mm_ss") + ".csv"))
+                using (StreamWriter sw = new StreamWriter(@"[OutputPath]" + DateTime.Now.ToString("yyyy_MM_dd_hh_mm_ss") + ".csv"))
                 {
                     sw.Write(sbExceptions.ToString());
                 }
@@ -71,6 +83,7 @@ static void Main(string[] args)
                 Console.WriteLine("There were no exeptions");
                 Console.ReadLine();
             }
+          
         }
 }
 }
