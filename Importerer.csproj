@@ -80,9 +80,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="exectuter.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="Importerer.Implementations\Importerer.Implementations.csproj">
       <Project>{7bfde232-cad7-4047-8049-73f874af5cf3}</Project>
       <Name>Importerer.Implementations</Name>
