@@ -83,6 +83,14 @@
     <Content Include="exectuter.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="Importerer.Implementations\Importerer.Implementations.csproj">
+      <Project>{7bfde232-cad7-4047-8049-73f874af5cf3}</Project>
+      <Name>Importerer.Implementations</Name>
+    </ProjectReference>
+    <ProjectReference Include="Importerer.Interfaces\Importerer.Interfaces.csproj">
+      <Project>{05fd01d5-b1b6-4090-99fd-e300cb6353d6}</Project>
+      <Name>Importerer.Interfaces</Name>
+    </ProjectReference>
     <ProjectReference Include="Importerer.Util\Importerer.Util.csproj">
       <Project>{68871be8-a980-4867-b6cd-3de383a87f08}</Project>
       <Name>Importerer.Util</Name>

@@ -56,7 +56,8 @@ namespace Importerer.Implementations
             ClassBuilder.Append("using System.Text;\n");
             ClassBuilder.Append("using Importerer.Interfaces;\n");
             ClassBuilder.Append("using Importerer.Implementations;\n");
-            
+            ClassBuilder.Append("using ImporterType;\n");
+
             //Namespace
             ClassBuilder.Append("namespace Importerer.Implementations {\n");
             
@@ -69,16 +70,16 @@ namespace Importerer.Implementations
             //Business Logic Start
             ClassBuilder.Append(" IDataFromFile CSVFileImporter = new CSVFileImport();");
             ClassBuilder.AppendFormat("var OriginRawData = CSVFileImporter.ImportFromFile(@\"{0}\");", originPath);
-            ClassBuilder.AppendFormat("var CompareRawData = CSVFileImporter.ImportFromFile(@\"{ 0}\");", comparePath);
+            ClassBuilder.AppendFormat("var CompareRawData = CSVFileImporter.ImportFromFile(@\"{0}\");", comparePath);
+            ClassBuilder.Append("\n");
+            ClassBuilder.AppendFormat("ICreator<{0}> {0}Creator = new Creator<{0}>();\n",TypeName);
+            ClassBuilder.AppendFormat("var OriginData = {0}Creator.CreateTypeList(OriginRawData);\n", TypeName);
+            ClassBuilder.AppendFormat("var CompareData = {0}Creator.CreateTypeList(CompareRawData);\n", TypeName);
             ClassBuilder.Append("");
-            ClassBuilder.Append("ICreator<Test> TestCreator = new Creator<Test>();");
-            ClassBuilder.Append("var OriginData = TestCreator.CreateTypeList(OriginRawData);");
-            ClassBuilder.Append("var CompareData = TestCreator.CreateTypeList(CompareRawData);");
+            ClassBuilder.AppendFormat("IComparerer<{0}> {0}Matcher = new MatchSets<{0}>();\n",TypeName);
+            ClassBuilder.AppendFormat("var NonMatching = {0}Matcher.Compare(OriginData, CompareData);\n", TypeName);
             ClassBuilder.Append("");
-            ClassBuilder.Append("IComparerer<Test> TestMatcher = new MatchSets<Test>();");
-            ClassBuilder.Append("var NonMatching = TestMatcher.Compare(OriginData, CompareData);");
-            ClassBuilder.Append("");
-            ClassBuilder.Append("IDataToFile<Test> CSVFileExpoerter = new CSVFileExport<Test>();");
+            ClassBuilder.AppendFormat("IDataToFile<{0}> CSVFileExpoerter = new CSVFileExport<{0}>();\n",TypeName);
             ClassBuilder.AppendFormat("CSVFileExpoerter.Export(NonMatching,@\"{0}\");", outputPath);
             //BUsiness Logic End
 

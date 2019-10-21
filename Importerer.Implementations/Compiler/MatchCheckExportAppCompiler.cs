@@ -51,7 +51,7 @@ namespace Importerer.Implementations
             }
             else
             {
-                Errors = "Succes";
+                Errors = "Success";
             }
 
             return Errors;

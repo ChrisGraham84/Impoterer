@@ -10,14 +10,11 @@ namespace Importerer.Implementations
 {
     public class EquatableTypeCompiler : ITypeCompiler
     {
-        string typeName { get; set ; }
         List<string> properties = new List<string>();
         
-        public EquatableTypeCompiler(string TypeName, List<string> Properties)
+        public EquatableTypeCompiler(List<string> Properties)
         {
-            typeName = TypeName;
             properties = Properties;
-
         }
 
         public string CompileCode(string TypeName)
@@ -25,7 +22,7 @@ namespace Importerer.Implementations
             string Error = string.Empty;
 
             ITypeCodeGenerator GenerateMatchExportCode = new TypeEquatableCodeGenerator();
-            var typeCode = GenerateMatchExportCode.GenerateTypeCode(properties, typeName);
+            var typeCode = GenerateMatchExportCode.GenerateTypeCode(properties, TypeName);
 
             CodeDomProvider codeProvider = CodeDomProvider.CreateProvider("CSharp");
             string Output = $"{TypeName}.dll";
@@ -49,7 +46,7 @@ namespace Importerer.Implementations
             }
             else
             {
-                return "Success!";   
+                return "success";   
             }
 
             return Error;

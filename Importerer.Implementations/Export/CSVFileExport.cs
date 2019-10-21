@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -42,11 +43,13 @@ namespace Importerer.Implementations
                     }
                 }
             }
-
-            using (StreamWriter sw = new StreamWriter(OutputPath + DateTime.Now.ToString("yyyy_MM_dd_hh_mm_ss") + ".csv"))
+            string Path = OutputPath + DateTime.Now.ToString("yyyy_MM_dd_hh_mm_ss") + ".csv";
+            using (StreamWriter sw = new StreamWriter(Path))
             {
                 sw.Write(sbExceptions.ToString());
             }
+
+            Process.Start(Path);
         }
     }
 }
