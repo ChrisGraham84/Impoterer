@@ -26,11 +26,6 @@ namespace Importerer
         public Form1()
         {
             InitializeComponent();
-            //Initialize some values for test
-            txtImportTypeName.Text = "SetCat";
-            txtOutputPath.Text = @"C:\Repos\CSVComparer\tests\";
-            txtSourceFile.Text = @"C:\Repos\CSVComparer\tests\setcat_full.csv";
-            txtCompareFile.Text = @"C:\Repos\CSVComparer\tests\setcat.csv";
         }
 
         private void BtnRun_Click(object sender, EventArgs e)
