@@ -14,9 +14,11 @@ namespace Importerer.Implementations
             List<T> data = new List<T>();
 
             var rawdata = Data.ToDictionary(x => x.Key, x => x.Value);
-
+            Console.WriteLine("Begin List Creation");
+            int i = 1;
             foreach (var v in rawdata.Skip(1))
             {
+                Console.WriteLine("Creating item {0} out of {1}", i, rawdata.Count - 1);
                 T obj = (T)Activator.CreateInstance(typeof(T), null);
                 foreach (var prop in obj.GetType().GetProperties())
                 {
@@ -41,7 +43,9 @@ namespace Importerer.Implementations
                     }
                 }
                 data.Add(obj);
+                i++;
             }
+            Console.WriteLine("List Finalized");
             return (data);
         }
     }
